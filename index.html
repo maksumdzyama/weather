@@ -1,20 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Погода на тиждень</title>
+    <title>Прогноз погоди на тиждень</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        input { padding: 10px; margin-right: 10px; }
-        button { padding: 10px; cursor: pointer; }
-        .forecast { margin-top: 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            color: #004d40;
+            text-align: center;
+            padding: 40px;
+        }
+        input, button {
+            padding: 12px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 20px;
+            border: 2px solid #00796b;
+        }
+        button {
+            background-color: #00796b;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+        .forecast {
+            margin-top: 30px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .day {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
-    <h1>Дізнайтесь погоду на тиждень</h1>
+    <h1>Прогноз погоди на тиждень</h1>
     <input type="text" id="city" placeholder="Введіть місто">
-    <button onclick="getWeather()">Отримати погоду</button>
+    <button onclick="getWeather()">Пошук</button>
     
     <div class="forecast" id="forecast"></div>
 
@@ -22,22 +53,22 @@
         async function getWeather() {
             const city = document.getElementById('city').value;
             if (!city) {
-                alert('Введіть назву міста');
+                alert('Будь ласка, введіть назву міста');
                 return;
             }
-            const apiKey = '263da8dcbf4d3c760f1cf9c0525a931b'; // Вставлений ваш ключ
+            const apiKey = '263da8dcbf4d3c760f1cf9c0525a931b';
             const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&cnt=7&appid=${apiKey}`);
             const data = await response.json();
             const forecastElement = document.getElementById('forecast');
             
             if (data.cod !== '200') {
-                forecastElement.innerHTML = `<p>Помилка: ${data.message}</p>`;
+                forecastElement.innerHTML = `<p style="color:red;">Помилка: ${data.message}</p>`;
                 return;
             }
 
             forecastElement.innerHTML = data.list.map(day => `
-                <div>
-                    <p><strong>${new Date(day.dt * 1000).toLocaleDateString()}</strong></p>
+                <div class="day">
+                    <p><strong>${new Date(day.dt * 1000).toLocaleDateString('uk-UA')}</strong></p>
                     <p>Температура: ${day.main.temp}°C</p>
                     <p>Опис: ${day.weather[0].description}</p>
                 </div>
